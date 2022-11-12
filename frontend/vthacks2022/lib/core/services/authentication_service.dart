@@ -14,31 +14,49 @@ enum AuthenticationStatus {
 class AuthenticationService extends ChangeNotifier {
   AuthenticationStatus status = AuthenticationStatus.uninitialized;
 
-  // Get credentials of current user
-  void verifyAuthStatus() async {
+  init() {
+    // verifyAuthStatus();
+  }
+
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseFirestore = FirebaseFirestore.instance;
+
+  Future<bool> sendPasswordResetEmail(String email) async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        status = AuthenticationStatus.authenticated;
-        notifyListeners();
-      } else {
-        status = AuthenticationStatus.unauthenticated;
-        notifyListeners();
-      }
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
     } catch (e) {
-      status = AuthenticationStatus.unauthenticated;
-      notifyListeners();
+      print('Auth_Service: $e');
+      return false;
     }
   }
 
+  // Get credentials of current user
+  void verifyAuthStatus() async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user != null) {
+        status = AuthenticationStatus.authenticated;
+        // notifyListeners();
+      } else {
+        status = AuthenticationStatus.unauthenticated;
+        // notifyListeners();
+      }
+    } catch (e) {
+      status = AuthenticationStatus.unauthenticated;
+      // notifyListeners();
+    }
+  }
+
+  late UserObject _customUser;
+
+  UserObject get customUser => _customUser;
+
 // Function to create a new user document in Firestore and register a user with Firebase Authentication
-  Future<UserObject?> registerUser(
+  Future<void> registerUser(
+    String displayName,
     String email,
     String password,
-    String username,
-    String phoneNumber,
-    String? firstName,
-    String? lastName,
   ) async {
     status = AuthenticationStatus.authenticating;
     notifyListeners();
@@ -57,38 +75,26 @@ class AuthenticationService extends ChangeNotifier {
 
       // Create a new user document in Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
         'email': email,
-        'username': username,
-        'phoneNumber': phoneNumber,
-        'firstName': firstName,
-        'lastName': lastName,
+        'displayName': displayName,
         'photoUrl': photoUrl,
       });
 
-      // Call fromJson to create a new User object
-      final user = UserObject.fromJson(
-        (await FirebaseFirestore.instance
-                .collection('users')
-                .doc(userCredential.user!.uid)
-                .get())
-            .data()!,
-      );
+      _customUser = UserObject(
+          displayName: displayName, email: email, photoUrl: photoUrl, uid: uid);
 
       status = AuthenticationStatus.authenticated;
       notifyListeners();
-
-      // Return a future with the user object
-      return Future.value(user);
     } catch (e) {
-      print("Account creation failed");
+      print("Account creation failed $e");
       status = AuthenticationStatus.unauthenticated;
       notifyListeners();
-      return Future.value(null);
     }
   }
 
 // Function to sign in a user with Firebase Authentication
-  Future<UserObject?> signInUser(String email, String password) async {
+  Future<void> signInUser(String email, String password) async {
     status = AuthenticationStatus.authenticating;
     notifyListeners();
 
@@ -97,24 +103,39 @@ class AuthenticationService extends ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password);
 
       // Call fromJson to create a new User object
-      final user = UserObject.fromJson(
-        (await FirebaseFirestore.instance
-                .collection('users')
-                .doc(userCredential.user!.uid)
-                .get())
-            .data()!,
-      );
+      // final user = UserObject.fromJson(
+      //   (await FirebaseFirestore.instance
+      //           .collection('users')
+      //           .doc(userCredential.user!.uid)
+      //           .get())
+      //       .data()!,
+      // );
+
+      print(userCredential.user!.uid);
+
+      // Pull the user's data from Firestore and put into _customUser
+      _customUser = UserObject.fromJson((await _firebaseFirestore
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .get())
+          .data()!);
+      //      ??
+      // {
+      //   'uid': 'L9BcmA6txLPLSGAJQmrMJh2zC142',
+      //   'displayName': 'Ryan',
+      //   'email': 'rpg@vt.edu',
+      // });
 
       status = AuthenticationStatus.authenticated;
       notifyListeners();
 
       // Return a future with the user object
-      return Future.value(user);
+      // return Future.value(user);
     } catch (e) {
-      print("Sign in failed");
+      print("Sign in failed ${e.toString()}");
       status = AuthenticationStatus.unauthenticated;
       notifyListeners();
-      return Future.value(null);
+      // return Future.value(null);
     }
   }
 
@@ -122,5 +143,6 @@ class AuthenticationService extends ChangeNotifier {
   Future<void> signOutUser() async {
     await FirebaseAuth.instance.signOut();
     status = AuthenticationStatus.unauthenticated;
+    notifyListeners();
   }
 }

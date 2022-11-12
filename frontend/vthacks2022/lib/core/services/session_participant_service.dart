@@ -26,7 +26,7 @@ class SessionParticipantService extends ChangeNotifier {
   // Create a new session participant by session and uder (join session button)
   Future<SessionParticipant?> createSessionParticipant(
       Session session, UserObject userObject) async {
-    var uuid = Uuid();
+    const uuid = Uuid();
 
     final sessionParticipant = SessionParticipant(
       uid: uuid.v4(),

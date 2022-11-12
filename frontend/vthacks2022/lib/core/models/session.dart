@@ -3,32 +3,24 @@ import 'package:flutter/foundation.dart';
 // Create a session class
 @immutable
 class Session {
-  const Session({
-    required this.uid,
-    required this.name,
-    required this.locked,
-    required this.streamingServices,
-  });
+  const Session({required this.id, required this.name, required this.code});
 
-  final String uid;
+  final String id;
   final String name;
-  final bool locked; // true if it's a locked sessions
-  final List<String> streamingServices;
+  final int code;
 
   Session.fromJson(Map<String, Object?> json)
       : this(
-          uid: json['uid']! as String,
+          id: json['id']! as String,
           name: json['name']! as String,
-          locked: json['locked']! as bool,
-          streamingServices: json['streamingServices']! as List<String>,
+          code: json['code']! as int,
         );
 
   Map<String, Object?> toJson() {
     return {
-      'uid': uid,
+      'id': id,
       'name': name,
-      'locked': locked,
-      'streamingServices': streamingServices,
+      'code': code,
     };
   }
 }

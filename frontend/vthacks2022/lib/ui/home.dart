@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:provider/provider.dart';
 import 'package:vthacks2022/core/services/media_service.dart';
+import 'package:vthacks2022/ui/manage_user.dart';
 import 'package:vthacks2022/ui/social.dart';
 import 'package:vthacks2022/ui/swiping.dart';
 
@@ -21,7 +22,7 @@ class _HomeState extends State<Home> {
     Text("Sessions"),
     const Social(),
     Swipping(),
-    Text("Page 4"),
+    ManageUser(),
   ];
 
   @override

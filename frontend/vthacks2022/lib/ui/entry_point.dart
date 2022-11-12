@@ -20,26 +20,17 @@ class _EntryPointState extends State<EntryPoint> {
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthenticationService>(context);
 
-    provider.verifyAuthStatus(); // Updates status accordingly
-
-    switch (provider.status) {
-      case AuthenticationStatus.uninitialized:
-        //return LoginPage();
-        return Intro();
-      case AuthenticationStatus.unauthenticated:
-        return LoginPage();
-      case AuthenticationStatus.authenticating:
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      case AuthenticationStatus.authenticated:
-        return const Scaffold(
-          body: Center(
-            child: Home(),
-          ),
-        );
+    if (provider.status == AuthenticationStatus.authenticated) {
+      return Home();
     }
+    // else if (provider.status == AuthenticationStatus.unauthenticated ||
+    //     provider.status == AuthenticationStatus.authenticating ||
+    //     provider.status == AuthenticationStatus.uninitialized) {
+    else {
+      return LoginPage();
+    }
+    /*else {
+      return LoginPage(); // TODO: Put this back to the intro screen
+    }*/
   }
 }

@@ -6,29 +6,20 @@ class UserObject {
   const UserObject({
     required this.uid,
     required this.email,
-    required this.username,
-    required this.phoneNumber,
-    this.firstName,
-    this.lastName,
+    required this.displayName,
     this.photoUrl,
   });
 
   final String uid;
   final String email;
-  final String username;
-  final String phoneNumber;
-  final String? firstName;
-  final String? lastName;
+  final String displayName;
   final String? photoUrl;
 
   UserObject.fromJson(Map<String, Object?> json)
       : this(
           uid: json['uid']! as String,
           email: json['email']! as String,
-          username: json['username']! as String,
-          phoneNumber: json['phoneNumber']! as String,
-          firstName: json['firstName']! as String,
-          lastName: json['lastName']! as String,
+          displayName: json['displayName']! as String,
           photoUrl: json['photoUrl']! as String,
         );
 
@@ -36,10 +27,7 @@ class UserObject {
     return {
       'uid': uid,
       'email': email,
-      'username': username,
-      'phoneNumber': phoneNumber,
-      'firstName': firstName,
-      'lastName': lastName,
+      'displayName': displayName,
       'photoUrl': photoUrl,
     };
   }
