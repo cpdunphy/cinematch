@@ -19,6 +19,8 @@ class _EntryPointState extends State<EntryPoint> {
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthenticationService>(context);
 
+    provider.verifyAuthStatus(); // Updates status accordingly
+
     switch (provider.status) {
       case AuthenticationStatus.uninitialized:
         return LoginPage();
