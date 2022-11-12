@@ -65,7 +65,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '863335713047',
     projectId: 'cinematch-a5f16',
     storageBucket: 'cinematch-a5f16.appspot.com',
-    iosClientId: '863335713047-j0rnnkqfbbicqo4g89jqqok8rqhei71m.apps.googleusercontent.com',
+    iosClientId:
+        '863335713047-j0rnnkqfbbicqo4g89jqqok8rqhei71m.apps.googleusercontent.com',
     iosBundleId: 'com.Ballygorey.vthacks2022',
   );
 }

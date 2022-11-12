@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vthacks2022/ui/MediaItem.dart';
 import 'dart:async';
-import 'core/models/Media.dart';
+import 'core/models/media.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
