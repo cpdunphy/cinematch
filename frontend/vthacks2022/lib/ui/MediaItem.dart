@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../core/models/Media.dart';
+import '../core/models/media.dart';
+import '../core/models/media_streaming_services.dart';
 
 class MediaItem extends StatelessWidget {
   MediaItem(this.media, this.reference, {super.key});
@@ -39,14 +40,14 @@ class MediaItem extends StatelessWidget {
           //   }),
           // ),
 
-          // Wrap(
-          //   direction: Axis.horizontal,
-          //   spacing: 8.0,
-          //   runSpacing: 8.0,
-          //   children: media.services.map((e) {
-          //     return Text(e.name);
-          //   }).toList(),
-          // )
+          Wrap(
+            direction: Axis.horizontal,
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: media.services.map((e) {
+              return Text(MediaStreamingServicesUI.displayName(e));
+            }).toList(),
+          )
         ],
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vthacks2022/core/models/media_services.dart';
-import 'package:vthacks2022/core/models/MediaType.dart';
+import 'package:vthacks2022/core/models/media_streaming_services.dart';
+import 'package:vthacks2022/core/models/media_type.dart';
 
 @immutable
 class Media {
@@ -30,7 +30,7 @@ class Media {
   final String overview;
   final String posterUrl;
   final Timestamp releaseDate;
-  final List<MediaServices> services;
+  final List<MediaStreamingServices> services;
   final String title;
   final double voteAverage;
   final int voteCount;
@@ -47,7 +47,9 @@ class Media {
           overview: json['overview']! as String,
           posterUrl: json['poster_path']! as String,
           releaseDate: json['release_date']! as Timestamp,
-          services: (json['streaming_services']! as List).cast<MediaServices>(),
+          services: ((json['streaming_services']! as List).cast<String>())
+              .map((e) => MediaStreamingServicesMap.fromString(e))
+              .toList(),
           title: json['title']! as String,
           voteAverage: json['vote_average']! as double,
           voteCount: json['vote_count']! as int,
