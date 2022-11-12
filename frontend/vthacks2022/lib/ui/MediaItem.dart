@@ -13,12 +13,41 @@ class MediaItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
-        media.title ?? "Error",
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Column(
+        children: [
+          Text(
+            media.title ?? "Error",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            media.overview ?? "Error",
+            style: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          // Image.network(media.posterUrl),
+
+          // ListView.builder(
+          //   shrinkWrap: true,
+          //   itemCount: 1,
+          //   scrollDirection: Axis.horizontal,
+          //   itemBuilder: ((BuildContext context, int index) {
+          //     return Text("Hello");
+          //   }),
+          // ),
+
+          // Wrap(
+          //   direction: Axis.horizontal,
+          //   spacing: 8.0,
+          //   runSpacing: 8.0,
+          //   children: media.services.map((e) {
+          //     return Text(e.name);
+          //   }).toList(),
+          // )
+        ],
       ),
     );
   }
