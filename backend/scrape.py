@@ -5,6 +5,7 @@ import pandas as pd
 import firebase_admin
 from firebase_admin import firestore, credentials
 from datetime import datetime
+import random
 
 load_dotenv()
 
@@ -12,6 +13,12 @@ movie_genres = requests.get('https://api.themoviedb.org/3/genre/movie/list?api_k
 movie_genres = {genre['id']: genre['name'] for genre in movie_genres['genres']}
 tv_genres = requests.get('https://api.themoviedb.org/3/genre/tv/list?api_key={}&language=en-US'.format(os.environ.get('MOVIE_API'))).json()
 tv_genres = {genre['id']: genre['name'] for genre in tv_genres['genres']}
+
+streaming_services = ['Netflix', 'Hulu', 'Prime Video', 'Disney+', 'HBO Max', 'Apple TV+']
+
+def choose_streaming_services():
+    return random.sample(streaming_services, random.randint(1, 4))
+
 
 def append_url(image_path):
     return 'https://image.tmdb.org/t/p/w1280' + image_path if image_path else "null"
@@ -62,6 +69,11 @@ df_shows.drop(columns=['adult', 'id', 'origin_country'], inplace=True)
 df_shows.rename(columns={'name': 'title', 'original_name': 'original_title', 'first_air_date': 'release_date'}, inplace=True)
 
 df_combined = pd.concat([df_movies, df_shows], ignore_index=True)
+
+# Add a column for streaming services to each row in dataframe
+df_combined['streaming_services'] = df_combined.apply(lambda x: choose_streaming_services(), axis=1)
+
+df_combined.rename(columns={'genre_ids': 'genres'}, inplace=True)
 
 df_combined.to_csv('titles.csv', index=False)
 
