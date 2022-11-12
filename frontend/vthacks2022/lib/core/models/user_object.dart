@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 
 // Create a user class
 @immutable
-class User {
-  const User({
+class UserObject {
+  const UserObject({
     required this.uid,
     required this.email,
     required this.username,
@@ -21,7 +21,7 @@ class User {
   final String? lastName;
   final String? photoUrl;
 
-  User.fromJson(Map<String, Object?> json)
+  UserObject.fromJson(Map<String, Object?> json)
       : this(
           uid: json['uid']! as String,
           email: json['email']! as String,

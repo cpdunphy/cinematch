@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gravatar/flutter_gravatar.dart';
+import 'package:vthacks2022/core/models/user_object.dart';
 
 // Function to create a new user document in Firestore and register a user with Firebase Authentication
 Future<void> registerUser(
@@ -34,9 +35,21 @@ Future<void> registerUser(
 }
 
 // Function to sign in a user with Firebase Authentication
-Future<void> signInUser(String email, String password) async {
-  await FirebaseAuth.instance
+Future<UserObject> signInUser(String email, String password) async {
+  final userCredential = await FirebaseAuth.instance
       .signInWithEmailAndPassword(email: email, password: password);
+
+  // Call fromJson to create a new User object
+  final user = UserObject.fromJson(
+    (await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get())
+        .data()!,
+  );
+
+  // Return a future with the user object
+  return Future.value(user);
 }
 
 // Function to sign out a user with Firebase Authentication
