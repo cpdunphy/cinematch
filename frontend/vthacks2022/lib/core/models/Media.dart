@@ -13,6 +13,7 @@ class Media {
     required this.originalLanguage,
     required this.originalTitle,
     required this.overview,
+    required this.popularity,
     required this.posterUrl,
     required this.releaseDate,
     required this.services,
@@ -28,6 +29,7 @@ class Media {
   final String originalLanguage;
   final String originalTitle;
   final String overview;
+  final double popularity;
   final String posterUrl;
   final Timestamp releaseDate;
   final List<MediaStreamingServices> services;
@@ -39,12 +41,13 @@ class Media {
       : this(
           backdropUrl: json["backdrop_path"]! as String,
           genre: (json['genres']! as List).cast<String>(),
-          // id: json['uid']! as String,
+          // id: json['Document ID']! as String,
           mediaType: MediaType.values.firstWhere((e) =>
               e.toString() == 'MediaType.' + (json["media_type"]! as String)),
           originalLanguage: json["original_language"]! as String,
           originalTitle: json['original_title']! as String,
           overview: json['overview']! as String,
+          popularity: json['popularity']! as double,
           posterUrl: json['poster_path']! as String,
           releaseDate: json['release_date']! as Timestamp,
           services: ((json['streaming_services']! as List).cast<String>())
@@ -59,10 +62,11 @@ class Media {
     return {
       'backdrop_path': backdropUrl,
       'genres': genre,
-      // 'uid': id,
+      // 'Document ID': id,
       'media_type': mediaType,
       'original_language': originalLanguage,
       'original_title': originalTitle,
+      'popularity': popularity,
       'poster_path': posterUrl,
       'release_date': releaseDate,
       'streaming_services': services,

@@ -5,10 +5,10 @@ import '../core/models/media.dart';
 import '../core/models/media_streaming_services.dart';
 
 class MediaItem extends StatelessWidget {
-  MediaItem(this.media, this.reference, {super.key});
+  MediaItem(this.media, {super.key});
 
   final Media media;
-  final DocumentReference<Media> reference;
+  // final DocumentReference<Media> reference;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +31,6 @@ class MediaItem extends StatelessWidget {
           ),
           // Image.network(media.posterUrl),
 
-          // ListView.builder(
-          //   shrinkWrap: true,
-          //   itemCount: 1,
-          //   scrollDirection: Axis.horizontal,
-          //   itemBuilder: ((BuildContext context, int index) {
-          //     return Text("Hello");
-          //   }),
-          // ),
-
           Wrap(
             direction: Axis.horizontal,
             spacing: 8.0,
@@ -47,7 +38,7 @@ class MediaItem extends StatelessWidget {
             children: media.services.map((e) {
               return Text(MediaStreamingServicesUI.displayName(e));
             }).toList(),
-          )
+          ),
         ],
       ),
     );
