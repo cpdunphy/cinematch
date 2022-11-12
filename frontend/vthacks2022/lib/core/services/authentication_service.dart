@@ -14,6 +14,23 @@ enum AuthenticationStatus {
 class AuthenticationService extends ChangeNotifier {
   AuthenticationStatus status = AuthenticationStatus.uninitialized;
 
+  // Get credentials of current user
+  void verifyAuthStatus() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        status = AuthenticationStatus.authenticated;
+        notifyListeners();
+      } else {
+        status = AuthenticationStatus.unauthenticated;
+        notifyListeners();
+      }
+    } catch (e) {
+      status = AuthenticationStatus.unauthenticated;
+      notifyListeners();
+    }
+  }
+
 // Function to create a new user document in Firestore and register a user with Firebase Authentication
   Future<UserObject?> registerUser(
     String email,
