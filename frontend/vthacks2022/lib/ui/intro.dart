@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:vthacks2022/ui/login.dart';
 
 class Intro extends StatefulWidget {
   const Intro({Key? key}) : super(key: key);
@@ -9,12 +10,25 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
+  late VideoPlayerController _controller;
+  //initialize video player controller
   @override
-    void initState() {
-      // TODO: implement initState
-      _controller=IntroController.network("./assets/Intro_Anim.mp4")
-      super.initState();
-    }
+  void initState() {
+    // TODO: implement initState
+    _controller = VideoPlayerController.network(
+        "https://youtube.com/shorts/E4DxPdJVvLs?feature=share")
+      ..initialize().then((_) {
+        setState(() {});
+      });
+    setState(() {});
+    super.initState();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _videoPlayerController.setVolume(0);
+    //   _videoPlayerController.play();
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,5 +44,19 @@ class _IntroState extends State<Intro> {
         });
       }), //floatingActionButton
     ); //scaffold
+
+    // need to connect this to another
+  }
+
+  Widget content() {
+    return Center(
+      child: Container(
+        width: 350,
+        height: 350,
+        child: _controller.value.isInitialized
+            ? VideoPlayer(_controller)
+            : Container(),
+      ),
+    );
   }
 }

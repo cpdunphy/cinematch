@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:vthacks2022/core/services/authentication_service.dart';
 import 'package:vthacks2022/ui/home.dart';
 import 'package:vthacks2022/ui/login.dart';
+import 'package:vthacks2022/ui/intro.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
@@ -21,7 +22,8 @@ class _EntryPointState extends State<EntryPoint> {
 
     switch (provider.status) {
       case AuthenticationStatus.uninitialized:
-        return LoginPage();
+        //return LoginPage();
+        return Intro();
       case AuthenticationStatus.unauthenticated:
         return LoginPage();
       case AuthenticationStatus.authenticating:
