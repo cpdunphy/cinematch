@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/container.dart';
+import 'package:provider/provider.dart';
+import 'package:vthacks2022/core/services/media_service.dart';
 import 'package:vthacks2022/ui/social.dart';
+import 'package:vthacks2022/ui/swiping.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,7 +20,7 @@ class _HomeState extends State<Home> {
   final pages = [
     Text("Sessions"),
     const Social(),
-    Text("Page 3"),
+    Swipping(),
     Text("Page 4"),
   ];
 
@@ -26,10 +29,32 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text("CINEMATCH"),
+        actions: getActions(_pageIndex),
       ),
       bottomNavigationBar: buildNavBar(context),
       body: pages[_pageIndex],
     );
+  }
+
+  getActions(int body) {
+    switch (body) {
+      case 2:
+        return [
+          // Action button that fetches the first 10 movies from the API
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              final provider =
+                  Provider.of<MediaService>(context, listen: false);
+              if (provider.mediaList.isEmpty) {
+                provider.getMedia();
+              } else {
+                provider.getNextMedia();
+              }
+            },
+          ),
+        ];
+    }
   }
 
   Widget buildNavBar(BuildContext context) {

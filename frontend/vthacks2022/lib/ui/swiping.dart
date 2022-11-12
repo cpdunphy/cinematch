@@ -21,35 +21,14 @@ class _MyHomePageState extends State<Swipping> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          Consumer<MediaService>(
-            builder: (context, mediaService, child) {
-              return IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () async {
-                  if (mediaService.mediaList.isEmpty) {
-                    mediaService.getMedia();
-                  } else {
-                    mediaService.getNextMedia();
-                  }
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: Consumer<MediaService>(
-        builder: (context, value, child) {
-          return ListView.builder(
-              itemCount: value.mediaList.length,
-              itemBuilder: ((context, index) {
-                return MediaItem(value.mediaList[index]);
-              }));
-        },
-      ),
+    return Consumer<MediaService>(
+      builder: (context, value, child) {
+        return ListView.builder(
+            itemCount: value.mediaList.length,
+            itemBuilder: ((context, index) {
+              return MediaItem(value.mediaList[index]);
+            }));
+      },
     );
   }
 }

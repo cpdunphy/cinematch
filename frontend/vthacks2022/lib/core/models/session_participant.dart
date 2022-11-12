@@ -6,7 +6,7 @@ import 'package:vthacks2022/core/models/media.dart';
 // Create a session participant class to represent a user's participation in a session
 @immutable
 class SessionParticipant {
-  const SessionParticipant({
+  SessionParticipant({
     required this.uid,
     required this.session,
     required this.user,
@@ -16,7 +16,7 @@ class SessionParticipant {
   final String uid;
   final Session session;
   final UserObject user;
-  final List<Media> mediaList;
+  List<Media> mediaList = [];
 
   SessionParticipant.fromJson(Map<String, Object?> json)
       : this(
@@ -30,7 +30,7 @@ class SessionParticipant {
 
   Map<String, Object?> toJson() {
     return {
-      'uid': uid,
+      // 'uid': uid,
       'session': session.toJson(),
       'user': user.toJson(),
       'mediaList': mediaList.map((e) => e.toJson()).toList(),
