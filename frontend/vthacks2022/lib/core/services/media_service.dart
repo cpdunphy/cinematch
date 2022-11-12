@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../models/media.dart';
 
-// Provider Class for Meda Service
+// Provider Class for Media Service
 class MediaService extends ChangeNotifier {
   final mediaRef =
       FirebaseFirestore.instance.collection('titles').withConverter<Media>(

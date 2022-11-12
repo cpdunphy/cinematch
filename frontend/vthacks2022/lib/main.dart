@@ -3,7 +3,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vthacks2022/ui/entry_point.dart';
-import 'package:vthacks2022/ui/media_item.dart';
+import 'package:vthacks2022/ui/home.dart';
+import 'package:vthacks2022/ui/media/media_item.dart';
 import 'dart:async';
 import 'core/models/media.dart';
 import 'core/services/media_service.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CINEMATCH',
       theme: ThemeData.from(colorScheme: const ColorScheme.highContrastDark()),
-      home: EntryPoint(),
+      home: Home(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],

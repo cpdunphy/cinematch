@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/services/media_service.dart';
-import 'media_item.dart';
+import 'media/media_item.dart';
 
 class Swipping extends StatefulWidget {
   String title = "CINEMATCH";

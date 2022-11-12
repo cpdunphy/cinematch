@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../core/models/media.dart';
-import '../core/models/media_streaming_services.dart';
+import '../../core/models/media.dart';
+import '../../core/models/media_streaming_services.dart';
 
 class MediaItem extends StatelessWidget {
   MediaItem(this.media, {super.key});
