@@ -8,9 +8,7 @@ import 'package:vthacks2022/ui/home.dart';
 import 'package:vthacks2022/ui/login.dart';
 
 class EntryPoint extends StatefulWidget {
-  const EntryPoint({required this.isLoggedIn, super.key});
-
-  final bool isLoggedIn;
+  const EntryPoint({super.key});
 
   @override
   State<EntryPoint> createState() => _EntryPointState();
