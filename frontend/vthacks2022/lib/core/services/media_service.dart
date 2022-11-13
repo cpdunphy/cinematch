@@ -8,7 +8,8 @@ import '../models/media.dart';
 class MediaService extends ChangeNotifier {
   final mediaRef =
       FirebaseFirestore.instance.collection('titles').withConverter<Media>(
-            fromFirestore: (snapshots, _) => Media.fromJson(snapshots.data()!),
+            fromFirestore: (snapshots, _) =>
+                Media.fromJson(snapshots.data()!, snapshots.id),
             toFirestore: (media, _) => media.toJson(),
           );
 
