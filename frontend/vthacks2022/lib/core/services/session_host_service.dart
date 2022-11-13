@@ -39,39 +39,44 @@ class SessionHostService extends ChangeNotifier {
   // Reconcile the results of a session at the end of the session
   Future<Media> reconcileSession() async {
     // Get a query snapshot of each participants media list and store as list of lists
-    final querySnapshot = await _firebaseFirestore
+    QuerySnapshot querySnapshot = await _firebaseFirestore
         .collection('sessions')
         .doc(_currentSession.id)
         .collection('participants')
         .get();
 
-    var mediaLists = querySnapshot.docs
-        .map((doc) => doc.data()['mediaList'] as List<String>)
-        .toList();
+    // var mediaLists = querySnapshot.docs
+    //     .map((doc) => doc.data()['mediaList'] as List<String>)
+    //     .toList();
 
-    // Flatten mediaLists
-    final flattenedMediaLists = mediaLists.expand((i) => i).toList();
+    List mediaList = [];
 
-    // Count occurences of each media in the lists
-    final Map<String, int> mediaCounts = {};
+    for (var doc in querySnapshot.docs) {
+      mediaList.addAll(doc['mediaList']);
+    }
 
-    flattenedMediaLists.map((media) {
-      if (mediaCounts.containsKey(media)) {
-        mediaCounts[media] = mediaCounts[media]! + 1;
+    // Count occurances of each media in the mediaList
+    final Map mediaCount = {};
+    for (var media in mediaList) {
+      if (mediaCount.containsKey(media)) {
+        mediaCount[media] = mediaCount[media]! + 1;
       } else {
-        mediaCounts[media] = 1;
+        mediaCount[media] = 1;
       }
-    }).toList();
+    }
 
-    print(mediaCounts);
+    // Retrieve the key from mediaCount with the highest value
+    var winnerKey = mediaCount.entries
+        .reduce((e1, e2) => e1.value > e2.value ? e1 : e2)
+        .key;
 
-    final commonElements = mediaLists.fold<Set>(
-        mediaLists.first.toSet(),
-        (previousValue, element) =>
-            previousValue.intersection(element.toSet()));
+    //Query firestore titles collection for document with id of winnerKey
+    Media winner = await _firebaseFirestore
+        .collection('titles')
+        .doc(winnerKey)
+        .get()
+        .then((value) => Media.fromJson(value.data()!, value.id));
 
-    Media media = (commonElements.toList()..shuffle()).first;
-
-    return Future.value(media);
+    return Future.value(winner);
   }
 }
