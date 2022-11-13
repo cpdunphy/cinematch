@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:vthacks2022/core/models/session.dart';
+import 'package:vthacks2022/core/models/session_host.dart';
 import 'package:vthacks2022/core/models/user_object.dart';
 import 'package:vthacks2022/core/models/media.dart';
 
@@ -7,29 +7,27 @@ import 'package:vthacks2022/core/models/media.dart';
 @immutable
 class SessionParticipant {
   SessionParticipant({
-    required this.uid,
-    required this.session,
+    required this.sessionCode,
     required this.user,
+    this.mediaList = const [],
   });
 
-  final String uid;
-  final Session session;
+  final int sessionCode;
   final UserObject user;
-  List<Media> mediaList = [];
+  List<String> mediaList;
 
   SessionParticipant.fromJson(Map<String, Object?> json)
       : this(
-          uid: json['uid']! as String,
-          session: Session.fromJson(json['session']! as Map<String, Object?>),
-          user: UserObject.fromJson(json['user']! as Map<String, Object?>),
+          sessionCode: json['sessonCode']! as int,
+          user: UserObject.fromJson(json['user']! as Map<String, dynamic>),
+          mediaList: (json['mediaList']! as List).cast<String>(),
         );
 
   Map<String, Object?> toJson() {
     return {
-      // 'uid': uid,
-      'session': session.toJson(),
+      'sessonCode': sessionCode,
       'user': user.toJson(),
-      'mediaList': mediaList.map((e) => e.toJson()).toList(),
+      'mediaList': mediaList,
     };
   }
 }

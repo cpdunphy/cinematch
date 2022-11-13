@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../models/session.dart';
+import '../models/session_host.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vthacks2022/core/models/media.dart';
 
@@ -10,13 +10,13 @@ import 'package:vthacks2022/core/models/media.dart';
 class SessionHostService extends ChangeNotifier {
   final _firebaseFirestore = FirebaseFirestore.instance;
 
-  late Session _currentSession;
+  late SessionHost _currentSession;
 
   // Create a session
   Future<void> createSession(String name, int code) async {
     const uuid = Uuid();
 
-    final session = Session(
+    final session = SessionHost(
       id: uuid.v4(),
       name: name,
       code: code,
