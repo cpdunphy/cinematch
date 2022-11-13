@@ -1,11 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:provider/provider.dart';
 import 'package:vthacks2022/core/services/authentication_service.dart';
 import 'package:vthacks2022/ui/login.dart';
-import 'package:vthacks2022/ui/intro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vthacks2022/ui/session/session_view.dart';
 
