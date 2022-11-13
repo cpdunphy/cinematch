@@ -8,7 +8,7 @@ class Media {
   Media({
     required this.backdropUrl,
     required this.genre,
-    // required this.id,
+    required this.id,
     required this.mediaType,
     required this.originalLanguage,
     required this.originalTitle,
@@ -24,7 +24,7 @@ class Media {
 
   final String backdropUrl;
   final List<String> genre;
-  // final String id;
+  final String id;
   final MediaType mediaType;
   final String originalLanguage;
   final String originalTitle;
@@ -37,11 +37,12 @@ class Media {
   final double voteAverage;
   final int voteCount;
 
-  Media.fromJson(Map<String, Object?> json)
+  Media.fromJson(Map<String, Object?> json, String idNum)
       : this(
           backdropUrl: json["backdrop_path"]! as String,
           genre: (json['genres']! as List).cast<String>(),
           // id: json['Document ID']! as String,
+          id: idNum,
           mediaType: MediaType.values.firstWhere((e) =>
               e.toString() == 'MediaType.' + (json["media_type"]! as String)),
           originalLanguage: json["original_language"]! as String,
