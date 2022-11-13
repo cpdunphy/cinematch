@@ -18,14 +18,14 @@ class SessionParticipant {
 
   SessionParticipant.fromJson(Map<String, Object?> json)
       : this(
-          sessionCode: json['sessonCode']! as int,
+          sessionCode: json['sessionCode']! as int,
           user: UserObject.fromJson(json['user']! as Map<String, dynamic>),
           mediaList: (json['mediaList']! as List).cast<String>(),
         );
 
   Map<String, Object?> toJson() {
     return {
-      'sessonCode': sessionCode,
+      'sessionCode': sessionCode,
       'user': user.toJson(),
       'mediaList': mediaList,
     };

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -11,10 +12,13 @@ class SessionHostService extends ChangeNotifier {
   final _firebaseFirestore = FirebaseFirestore.instance;
 
   late SessionHost _currentSession;
+  SessionHost get currentSession => _currentSession;
 
   // Create a session
-  Future<void> createSession(String name, int code) async {
+  Future<void> createSession(String name) async {
     const uuid = Uuid();
+
+    var code = Random().nextInt(900000) + 100000;
 
     final session = SessionHost(
       id: uuid.v4(),
@@ -34,8 +38,24 @@ class SessionHostService extends ChangeNotifier {
 
   // Reconcile the results of a session at the end of the session
   Future<Media> reconcileSession() async {
-    Media reccomended =
-        (_currentSession.reconciledTitles.toList()..shuffle()).first;
-    return Future.value(reccomended);
+    // Get a query snapshot of each participants media list and store as list of lists
+    final querySnapshot = await _firebaseFirestore
+        .collection('sessions')
+        .doc(_currentSession.id)
+        .collection('participants')
+        .get();
+
+    final mediaLists = querySnapshot.docs
+        .map((doc) => doc.data()['mediaList'] as List)
+        .toList();
+
+    final commonElements = mediaLists.fold<Set>(
+        mediaLists.first.toSet(),
+        (previousValue, element) =>
+            previousValue.intersection(element.toSet()));
+
+    Media media = (commonElements.toList()..shuffle()).first;
+
+    return Future.value(media);
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/services/media_service.dart';
-import 'media/media_item.dart';
+import '../../core/services/media_service.dart';
+import '../media/media_item.dart';
 // import 'package:flutter_swipable/flutter_swipable.dart';
 import 'package:swipe/swipe.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,30 +16,15 @@ class Swipping extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Swipping> {
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
-  // double height = MediaQuery.of(context).size.height;
-
   @override
   Widget build(BuildContext context) {
-    // return Consumer<MediaService>(
-    //   builder: (context, value, child) {
-    //     return ListView.builder(
-    //         itemCount: value.mediaList.length,
-    //         itemBuilder: ((context, index) {
-    //           return MediaItem(value.mediaList[index]);
-    //         }));
-    //   },
-    // );
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Consumer<MediaService>(
       builder: (context, value, child) {
         return ListView.builder(
           itemCount: value.mediaList.length,
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return Card(
               elevation: 10,

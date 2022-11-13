@@ -17,10 +17,10 @@ class MediaService extends ChangeNotifier {
 
   List<Media> get mediaList => _mediaList;
 
-  // Fetch first 10 media from Firestore
+  // Fetch first 20 media from Firestore
   Future<void> getMedia() async {
     final media =
-        await mediaRef.orderBy("popularity", descending: true).limit(10).get();
+        await mediaRef.orderBy("popularity", descending: true).limit(20).get();
     _mediaList.addAll(media.docs.map((e) => e.data()).toList());
     notifyListeners();
   }
