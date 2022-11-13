@@ -32,7 +32,6 @@ class SessionParticipantService extends ChangeNotifier {
       uid: uuid.v4(),
       session: session,
       user: userObject,
-      mediaList: [],
     );
 
     final ref =

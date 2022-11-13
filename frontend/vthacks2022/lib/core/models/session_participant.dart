@@ -10,7 +10,6 @@ class SessionParticipant {
     required this.uid,
     required this.session,
     required this.user,
-    required this.mediaList,
   });
 
   final String uid;
@@ -23,9 +22,6 @@ class SessionParticipant {
           uid: json['uid']! as String,
           session: Session.fromJson(json['session']! as Map<String, Object?>),
           user: UserObject.fromJson(json['user']! as Map<String, Object?>),
-          mediaList: (json['mediaList']! as List)
-              .map((e) => Media.fromJson(e as Map<String, Object?>))
-              .toList(),
         );
 
   Map<String, Object?> toJson() {

@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:vthacks2022/core/models/media.dart';
 
 // Create a session class
 @immutable
 class Session {
-  const Session({required this.id, required this.name, required this.code});
+  Session({required this.id, required this.name, required this.code});
 
   final String id;
   final String name;
   final int code;
+  List<Media> reconciledTitles = [];
 
   Session.fromJson(Map<String, Object?> json)
       : this(
@@ -21,6 +23,7 @@ class Session {
       'id': id,
       'name': name,
       'code': code,
+      'reconciledTitles': reconciledTitles.map((e) => e.toJson()).toList(),
     };
   }
 }
