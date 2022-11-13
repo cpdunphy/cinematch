@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:vthacks2022/core/services/session_participant_service.dart';
 import 'package:vthacks2022/core/services/session_host_service.dart';
 import 'package:vthacks2022/ui/entry_point.dart';
+import 'package:vthacks2022/ui/explore.dart';
+import 'package:vthacks2022/ui/session/session_view.dart';
 import 'dart:async';
 import 'core/services/media_service.dart';
 import 'core/services/authentication_service.dart';

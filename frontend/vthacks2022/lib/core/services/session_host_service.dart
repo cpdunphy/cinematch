@@ -45,9 +45,25 @@ class SessionHostService extends ChangeNotifier {
         .collection('participants')
         .get();
 
-    final mediaLists = querySnapshot.docs
-        .map((doc) => doc.data()['mediaList'] as List)
+    var mediaLists = querySnapshot.docs
+        .map((doc) => doc.data()['mediaList'] as List<String>)
         .toList();
+
+    // Flatten mediaLists
+    final flattenedMediaLists = mediaLists.expand((i) => i).toList();
+
+    // Count occurences of each media in the lists
+    final Map<String, int> mediaCounts = {};
+
+    flattenedMediaLists.map((media) {
+      if (mediaCounts.containsKey(media)) {
+        mediaCounts[media] = mediaCounts[media]! + 1;
+      } else {
+        mediaCounts[media] = 1;
+      }
+    }).toList();
+
+    print(mediaCounts);
 
     final commonElements = mediaLists.fold<Set>(
         mediaLists.first.toSet(),

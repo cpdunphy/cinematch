@@ -8,11 +8,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
+import 'package:vthacks2022/core/models/media.dart';
 import 'package:vthacks2022/core/services/authentication_service.dart';
 import 'package:vthacks2022/core/services/media_service.dart';
 import 'package:vthacks2022/core/services/session_host_service.dart';
 import 'package:vthacks2022/core/services/session_participant_service.dart';
 import 'package:otp_text_field/otp_text_field.dart';
+import 'package:vthacks2022/ui/explore.dart';
+import 'package:vthacks2022/ui/session/session_result.dart';
 import 'package:vthacks2022/ui/session/session_waiting.dart';
 import 'package:vthacks2022/ui/session/swiping.dart';
 import '../../../../core/models/session_host.dart';
@@ -24,121 +27,201 @@ class SessionView extends StatefulWidget {
   State<SessionView> createState() => _SessionViewState();
 }
 
-enum SwipeState { swiping, waiting, none, result }
-
 class _SessionViewState extends State<SessionView> {
   final ButtonStyle style = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
 
   bool isJoiningSession = true;
 
-  SwipeState swipeState = SwipeState.none;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  bool loadedData = false;
 
   @override
   Widget build(BuildContext context) {
-    AuthenticationService authService =
-        Provider.of<AuthenticationService>(context);
+    SessionParticipantService participantService =
+        Provider.of<SessionParticipantService>(context);
+    MediaService mediaService = Provider.of<MediaService>(context);
+
+    if (!loadedData) {
+      mediaService.getMedia();
+      loadedData = true;
+    }
     return Scaffold(
-      appBar: AppBar(
-        title: Text("CINEMATCH"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              authService.signOutUser();
-            },
-          )
-        ],
-      ),
-      body: body(context),
+      // appBar: AppBar(
+      //   title: Text("CINEMATCH"),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(Icons.logout),
+      //       onPressed: () {
+      //         authService.signOutUser();
+      //       },
+      //     )
+      //   ],
+      // ),
+      body: body(context, participantService.swipeState),
     );
   }
 
-  Widget body(BuildContext context) {
-    switch (swipeState) {
+  Widget body(BuildContext context, SwipeState state) {
+    switch (state) {
       case SwipeState.swiping:
-        MediaService mediaService = Provider.of<MediaService>(context);
-        mediaService.getMedia();
-        return Swipping();
+        return Swipping(
+          swipeState: state,
+        );
       case SwipeState.waiting:
         return SessionWaiting();
-      case SwipeState.none:
-        return form(context);
+      case SwipeState.gallery:
+        return home(context);
       case SwipeState.result:
-        return Container();
+        return SessionResult();
     }
+  }
+
+  Widget home(BuildContext context) {
+    AuthenticationService authService =
+        Provider.of<AuthenticationService>(context);
+
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          // pinned: true,
+          // snap: true,
+          // floating: _floating,
+          expandedHeight: 80.0,
+          flexibleSpace: const FlexibleSpaceBar(
+            title: Text('CINEMATCH'),
+            background: FlutterLogo(),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                await authService.signOutUser();
+              },
+              // alignment: Alignment.centerLeft,
+            )
+          ],
+        ),
+        SliverToBoxAdapter(
+          child: form(context),
+        ),
+        explore(context),
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 40,
+            width: 40,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget explore(BuildContext context) {
+    MediaService value = Provider.of<MediaService>(context);
+
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        ((context, index) {
+          return Container(
+            height: 180,
+            width: 180,
+            child: TextButton(
+              child: Card(
+                child: Image.network(
+                  value.mediaList[index].posterUrl,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+              onPressed: () {
+                AlertDialog(
+                  title: Text(value.mediaList[index].title),
+                  content: Text(value.mediaList[index].overview),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        }),
+        childCount: value.mediaList.length,
+      ),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200.0,
+        mainAxisSpacing: 10.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 1.0,
+      ),
+    );
   }
 
   Widget form(BuildContext context) {
     SessionHostService sessionHostService =
         Provider.of<SessionHostService>(context);
 
-    SessionParticipantService sessionParticipantService =
+    SessionParticipantService participantService =
         Provider.of<SessionParticipantService>(context);
 
     AuthenticationService authService =
         Provider.of<AuthenticationService>(context);
-    return Form(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+
+    MediaService mediaService = Provider.of<MediaService>(context);
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text("Hosting a Session"),
-                  Switch(
-                    // This bool value toggles the switch.
-                    value: !isJoiningSession,
-                    activeColor: Color.fromARGB(255, 162, 54, 244),
-                    onChanged: (bool value) {
-                      // This is called when the user toggles the switch.
-                      setState(() {
-                        isJoiningSession = !isJoiningSession;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const Divider(color: Colors.white38),
-            const SizedBox(
-              height: 24,
-            ),
-            isJoiningSession
-                ? joiningSession(context)
-                : hostingSession(context),
-            Container(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (isJoiningSession) {
-                    await sessionParticipantService.createSessionParticipant(
-                        code, authService.customUser);
-                    setState(() {
-                      swipeState = SwipeState.swiping;
-                    });
-                  } else {
-                    var name = _displayNameController.text;
-                    sessionHostService.createSession(name);
-                    await sessionParticipantService.createSessionParticipant(
-                        sessionHostService.currentSession.code,
-                        authService.customUser);
-                    setState(() {
-                      swipeState = SwipeState.swiping;
-                    });
-                  }
-                },
-                style: style,
-                child: Text(
-                  isJoiningSession ? "JOIN SESSION" : "HOST SESSION",
-                ),
-              ),
+            Text("Hosting a Session"),
+            Switch(
+              // This bool value toggles the switch.
+              value: !isJoiningSession,
+              activeColor: Color.fromARGB(255, 162, 54, 244),
+              onChanged: (bool value) {
+                // This is called when the user toggles the switch.
+                setState(() {
+                  isJoiningSession = !isJoiningSession;
+                });
+              },
             ),
           ],
         ),
-      ),
+        const Divider(color: Colors.white38),
+        const SizedBox(
+          height: 8,
+        ),
+        isJoiningSession ? joiningSession(context) : hostingSession(context),
+        Container(
+          child: ElevatedButton(
+            onPressed: () async {
+              if (isJoiningSession) {
+                await participantService.createSessionParticipant(
+                    code, authService.customUser);
+                participantService.setSwipeState(SwipeState.swiping);
+              } else {
+                var name = _displayNameController.text;
+                await sessionHostService.createSession(name);
+                await participantService.createSessionParticipant(
+                    sessionHostService.currentSession.code,
+                    authService.customUser);
+                participantService.setSwipeState(SwipeState.swiping);
+              }
+            },
+            style: style,
+            child: Text(
+              isJoiningSession ? "JOIN SESSION" : "HOST SESSION",
+            ),
+          ),
+        ),
+        const Divider(height: 12, color: Colors.white38),
+        const SizedBox(height: 8)
+      ],
     );
   }
 
@@ -149,10 +232,8 @@ class _SessionViewState extends State<SessionView> {
   Widget joiningSession(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text("Session Code"),
-        ),
+        Text("Enter Session Code"),
+        SizedBox(height: 8),
         OTPTextField(
           contentPadding: EdgeInsets.fromLTRB(8, 24, 8, 4),
           controller: otpController,
@@ -162,7 +243,7 @@ class _SessionViewState extends State<SessionView> {
           fieldWidth: 45,
           fieldStyle: FieldStyle.box,
           outlineBorderRadius: 15,
-          style: TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: 18),
           otpFieldStyle: OtpFieldStyle(
             backgroundColor: Color.fromARGB(255, 33, 33, 33),
             focusBorderColor: Colors.teal,
