@@ -22,32 +22,17 @@ class _EntryPointState extends State<EntryPoint> {
     final provider = Provider.of<AuthenticationService>(context);
 
     return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            User? user = snapshot.data;
-            if (user == null) {
-              return LoginPage();
-            }
-            return Home();
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+          if (user == null) {
+            return LoginPage();
           }
-          return LoginPage();
-        });
-
-    /*
-
-    if (provider.status == AuthenticationStatus.authenticated) {
-      return Home();
-    }
-    // else if (provider.status == AuthenticationStatus.unauthenticated ||
-    //     provider.status == AuthenticationStatus.authenticating ||
-    //     provider.status == AuthenticationStatus.uninitialized) {
-    else {
-      return LoginPage();
-    }
-    /*else {
-      return LoginPage(); // TODO: Put this back to the intro screen
-    }*/
-    */
+          return Home();
+        }
+        return LoginPage();
+      },
+    );
   }
 }

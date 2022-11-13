@@ -35,6 +35,7 @@ class _MyHomePageState extends State<Swipping> {
     //   },
     // );
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Consumer<MediaService>(
       builder: (context, value, child) {
         return ListView.builder(
@@ -42,34 +43,36 @@ class _MyHomePageState extends State<Swipping> {
           itemBuilder: (BuildContext context, int index) {
             return Card(
               elevation: 10,
-              margin: EdgeInsets.fromLTRB(200, 30, 200, 30),
+              margin: EdgeInsets.fromLTRB(30, 30, 30, 30),
               child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                        value.mediaList[index].posterUrl,
-                      ),
-                    ),
-                  ),
-                  height: height * 0.9,
+                  // decoration: BoxDecoration(
+                  //   image: DecorationImage(
+                  //     fit: BoxFit.cover,
+                  //     image: NetworkImage(
+                  //       value.mediaList[index].posterUrl,
+                  //     ),
+                  //   ),
+                  // ),
+                  // height: height * 0.9,
+                  // width: width * 0.8,
                   child: Dismissible(
-                      background: Container(
-                        color: Colors.green,
-                      ),
-                      secondaryBackground: Container(
-                        color: Colors.red,
-                      ),
-                      key: ValueKey<String>(value.mediaList[index].id),
-                      onDismissed: (DismissDirection direction) {
-                        setState(() {
-                          value.mediaList.removeAt(index);
-                        });
-                      },
-                      child: ListTile(
-                          title: Text(
-                        '${value.mediaList[index].title}',
-                      )))),
+                background: Container(
+                  color: Colors.green,
+                ),
+                secondaryBackground: Container(
+                  color: Colors.red,
+                ),
+                key: ValueKey<String>(value.mediaList[index].id),
+                onDismissed: (DismissDirection direction) {
+                  setState(() {
+                    value.mediaList.removeAt(index);
+                  });
+                },
+                // child: Text(
+                //   '${value.mediaList[index].title}',
+                // ),
+                child: Image.network(value.mediaList[index].posterUrl),
+              )),
             );
           },
         );

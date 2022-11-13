@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _pageIndex = 0;
+  int _pageIndex = 1;
 
   final pages = [
     Text("Sessions"),
