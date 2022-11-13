@@ -7,6 +7,7 @@ import 'package:vthacks2022/core/services/authentication_service.dart';
 import 'package:vthacks2022/ui/home.dart';
 import 'package:vthacks2022/ui/login.dart';
 import 'package:vthacks2022/ui/intro.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
@@ -20,6 +21,21 @@ class _EntryPointState extends State<EntryPoint> {
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthenticationService>(context);
 
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            User? user = snapshot.data;
+            if (user == null) {
+              return LoginPage();
+            }
+            return Home();
+          }
+          return LoginPage();
+        });
+
+    /*
+
     if (provider.status == AuthenticationStatus.authenticated) {
       return Home();
     }
@@ -32,5 +48,6 @@ class _EntryPointState extends State<EntryPoint> {
     /*else {
       return LoginPage(); // TODO: Put this back to the intro screen
     }*/
+    */
   }
 }

@@ -14,8 +14,22 @@ enum AuthenticationStatus {
 class AuthenticationService extends ChangeNotifier {
   AuthenticationStatus status = AuthenticationStatus.uninitialized;
 
-  init() {
-    // verifyAuthStatus();
+  Future<void> setupAuth() async {
+    print("Authentiation Service;");
+
+    String? uid = await getUserId();
+
+    if (uid != null) {
+      await pullProfile(uid);
+    }
+  }
+
+  Future<String?> getUserId() async {
+    try {
+      return _firebaseAuth.currentUser?.uid;
+    } catch (e) {
+      return null;
+    }
   }
 
   final _firebaseAuth = FirebaseAuth.instance;
@@ -114,11 +128,7 @@ class AuthenticationService extends ChangeNotifier {
       print(userCredential.user!.uid);
 
       // Pull the user's data from Firestore and put into _customUser
-      _customUser = UserObject.fromJson((await _firebaseFirestore
-              .collection('users')
-              .doc(userCredential.user!.uid)
-              .get())
-          .data()!);
+      await pullProfile(userCredential.user!.uid);
       //      ??
       // {
       //   'uid': 'L9BcmA6txLPLSGAJQmrMJh2zC142',
@@ -137,6 +147,12 @@ class AuthenticationService extends ChangeNotifier {
       notifyListeners();
       // return Future.value(null);
     }
+  }
+
+  // Pull the user's data from Firestore and put into _customUser
+  Future<UserObject> pullProfile(String uid) async {
+    return _customUser = UserObject.fromJson(
+        (await _firebaseFirestore.collection('users').doc(uid).get()).data()!);
   }
 
 // Function to sign out a user with Firebase Authentication

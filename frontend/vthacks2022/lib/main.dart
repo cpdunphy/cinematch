@@ -1,6 +1,8 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:vthacks2022/core/services/session_participant_service.dart';
+import 'package:vthacks2022/core/services/session_host_service.dart';
 import 'package:vthacks2022/ui/entry_point.dart';
 import 'dart:async';
 import 'core/services/media_service.dart';
@@ -18,6 +20,8 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => MediaService()),
         ChangeNotifierProvider(create: (_) => AuthenticationService()),
+        ChangeNotifierProvider(create: (_) => SessionHostService()),
+        ChangeNotifierProvider(create: (_) => SessionParticipantService()),
       ],
       child: MyApp(),
     ),
@@ -34,6 +38,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    AuthenticationService authService =
+        Provider.of<AuthenticationService>(context, listen: false);
+    authService.setupAuth();
+
     return MaterialApp(
       title: 'CINEMATCH',
       // this is the theme => can edit this for colors

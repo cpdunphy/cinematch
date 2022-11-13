@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:provider/provider.dart';
 import 'package:vthacks2022/core/services/media_service.dart';
 import 'package:vthacks2022/ui/manage_user.dart';
-import 'package:vthacks2022/ui/social.dart';
+import 'package:vthacks2022/ui/session_view.dart';
 import 'package:vthacks2022/ui/swiping.dart';
 
 class Home extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeState extends State<Home> {
 
   final pages = [
     Text("Sessions"),
-    const Social(),
+    const SessionView(),
     Swipping(),
     ManageUser(),
   ];
@@ -72,12 +73,12 @@ class _HomeState extends State<Home> {
             },
             icon: _pageIndex == 0
                 ? const Icon(
-                    Icons.home_filled,
+                    CupertinoIcons.house_fill,
                     color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
-                    Icons.home_outlined,
+                    CupertinoIcons.house,
                     color: Colors.white,
                     size: 35,
                   ),
@@ -110,12 +111,12 @@ class _HomeState extends State<Home> {
             },
             icon: _pageIndex == 2
                 ? const Icon(
-                    Icons.widgets_rounded,
+                    CupertinoIcons.rectangle_grid_2x2,
                     color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
-                    Icons.widgets_outlined,
+                    CupertinoIcons.rectangle_grid_2x2,
                     color: Colors.white,
                     size: 35,
                   ),
@@ -129,12 +130,12 @@ class _HomeState extends State<Home> {
             },
             icon: _pageIndex == 3
                 ? const Icon(
-                    Icons.person,
+                    CupertinoIcons.person_circle_fill,
                     color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
-                    Icons.person_outline,
+                    CupertinoIcons.person_circle,
                     color: Colors.white,
                     size: 35,
                   ),
