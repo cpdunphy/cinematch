@@ -18,5 +18,5 @@ The app was built using Flutter as the front-end and Google Firebase Firestore a
 
 # Try it Out
 
-To try out our app, we encourage you to install Flutter and try the app locally or check out our [Figma]("https://www.figma.com/proto/PAgF9TyMdqkvPazXWkjWPo/Application?node-id=40%3A135&scaling=scale-down&page-id=0%3A1") for a simulated expereince! 
+To try out our app, we encourage you to install Flutter and try the app locally or check out our [Figma](https://www.figma.com/proto/PAgF9TyMdqkvPazXWkjWPo/Application?node-id=40%3A135&scaling=scale-down&page-id=0%3A1) for a simulated expereince! 
 
