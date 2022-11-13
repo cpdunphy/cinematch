@@ -1,3 +1,14 @@
+# Purpose 
+
+
+# Implementation 
+## Tools Used 
+
+
+# Future Steps 
+
+
+
 # Flask Application - Movies API
 
 ## Getting started
