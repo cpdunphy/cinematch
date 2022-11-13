@@ -8,6 +8,7 @@ import 'package:vthacks2022/ui/home.dart';
 import 'package:vthacks2022/ui/login.dart';
 import 'package:vthacks2022/ui/intro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vthacks2022/ui/explore.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
