@@ -1,11 +1,11 @@
 {
-    "name": "vthacks2022",
-    "short_name": "vthacks2022",
+    "name": "CineMatch",
+    "short_name": "CineMatch",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Figure out what to watch with friends :)",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
